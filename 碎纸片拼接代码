@@ -1,0 +1,120 @@
+ % 导入附件1图像  汉字拼接
+ files=dir('C:\Users\qq136\Desktop\问题一代码\附件1\*.bmp');
+for n=1:numel(files)
+   image{n}=strcat('C:\Users\qq136\Desktop\问题一代码\附件1\',files(n).name);
+end
+%图像的二值化处理
+for n=1:numel(files)
+    cell{n}=imread(image{n});
+    a=imread(image{n});
+    level=graythresh(a);
+    cell1{n}=im2bw(a,level);
+end
+
+%求出图片相似度矩阵
+for i=1:19
+    for k=1:19
+        xs(i,k)=0;
+    for j=1:1980
+        if(cell1{1,i}(j,72)==cell1{1,k}(j,1))   
+            xs(i,k)=1+xs(i,k);
+        end
+    end
+    end
+end
+
+for i=1:19
+    xs(i,i)=0;
+end 
+
+for i=1:19
+da(i)=max(xs(i,:));
+end
+wei=find(da==max(da));
+for i=1:19
+    k=find(xs(i,[1:19])==da(i));  
+    lian(i,1)=i;                 
+    lian(i,2)=k;                
+end
+
+lian(wei,1)=0;
+tou=lian(wei,2);
+xu(1)=tou;
+%正确的图像排序序列
+for i=1:18
+    xu(i+1)=lian(xu(i),2); 
+end
+
+%根据求出的序列画出图像
+for i=1:19
+I(:,[72*(i-1)+1:72*i])=cell{1,xu(i)};     
+end
+
+imwrite(I,'hanzi.jpg','quality',100);   
+imshow('hanzi.jpg') ;  
+
+
+
+
+
+
+
+
+
+%导入附件2图片矩阵   英语拼接
+% 导入附件1图像
+ files=dir('C:\Users\qq136\Desktop\问题一代码\附件2\*.bmp');
+for n=1:numel(files)
+   image{n}=strcat('C:\Users\qq136\Desktop\问题一代码\附件2\',files(n).name);
+end
+%图像的二值化处理
+for n=1:numel(files)
+    cell{n}=imread(image{n});
+    a=imread(image{n});
+    level=graythresh(a);
+    cell1{n}=im2bw(a,level);
+end
+%求出图片相似度矩阵
+for i=1:19
+    for k=1:19
+        xs(i,k)=0;
+    for j=1:1980
+        if(cell1{1,i}(j,72)==cell1{1,k}(j,1))  
+            xs(i,k)=1+xs(i,k);
+        end
+    end
+    end
+end
+
+for i=1:19
+    xs(i,i)=0;
+end
+
+for i=1:19
+da(i)=max(xs(i,:));
+end
+wei=find(da==max(da));
+for i=1:19
+    k=find(xs(i,[1:19])==da(i));  
+    lian(i,1)=i;                  
+    lian(i,2)=k;                 
+end
+lian(wei,1)=0;
+lian(wei,1)=0;
+tou=lian(wei,2);
+xu(1)=tou;
+%正确排序的序列
+for i=1:18
+    xu(i+1)=lian(xu(i),2); 
+end
+
+%复原图片
+for i=1:19
+I(:,[72*(i-1)+1:72*i])=cell{1,xu(i)};
+end
+
+imwrite(I,'Englishpinjie.jpg','quality',100);
+imshow('Englishpinjie.jpg')          
+
+
+
